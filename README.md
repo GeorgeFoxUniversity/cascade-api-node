@@ -1,12 +1,14 @@
 # Node Wrapper for Cascade Server API
 
-This wraps the [REST API implementation](https://www.hannonhill.com/cascadecms/latest/developing-in-cascade/rest-api/index.html) of [Cascade Server CMS](https://www.hannonhill.com/cascadecms/latest/index.html) into a Node module. While operations have easy to use functions, currently not all APIs do. There is also a generic API Call, which you can use to complete any operation, an example is provided later on.
+This wraps the [REST API implementation](https://www.hannonhill.com/cascadecms/latest/developing-in-cascade/rest-api/index.html) of [Cascade Server CMS](https://www.hannonhill.com/cascadecms/latest/index.html) into a Node.js module. While operations have easy to use functions, currently not all APIs do. There is also a generic API Call, which you can use to complete any operation, an example is provided later on.
 
 # Setup
 This is installed as a node module in your project. In your node project, run the following command:
+
 `npm install git://github.com/GeorgeFoxUniversity/cascade-api-node.git`
 
 You can also clone or download the files, and install them locally.
+
 `npm install ./local-folder-path`
 
 # Usage
