@@ -12,7 +12,7 @@ You can also clone or download the files, and install them locally.
 `npm install ./local-folder-path`
 
 # Usage
-Once it's installed, require it in your node project, to create a new Cascade object. Then you can call functions on that object.
+Once it's installed, require it in your node project and create a new Cascade object. Then you can call functions on that object.
 ```javascript
 const Cascade = require("cascade-api-node");
 const cascadeAPI = new Cascade("https://cascade.example.edu",{username:"username",password:"password"},"siteName");
