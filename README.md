@@ -6,7 +6,7 @@ This wraps the [REST API implementation](https://www.hannonhill.com/cascadecms/l
 You can either install it as a node module, adding it to your project dependencies, or directly import the JS file.
 
 ## Node Module
-In your project directory folder run `npm install ../path-to-folder`. Then in your project you can create a new instance:
+In your project directory folder run `npm install ./path-to-folder`. Then in your project you can create a new instance:
 ```javascript
 const Cascade = require("./cascade-api-node");
 const cascadeAPI = new Cascade("https://cascade.example.edu",{username:"username",password:"password"},"siteName");
