@@ -8,14 +8,14 @@ You can either install it as a node module, adding it to your project dependenci
 ## Node Module
 In your project directory folder run `npm install ./path-to-folder`. Then in your project you can create a new instance:
 ```javascript
-const Cascade = require("./cascade-api-node");
+const Cascade = require("cascade-api-node");
 const cascadeAPI = new Cascade("https://cascade.example.edu",{username:"username",password:"password"},"siteName");
 ```
 
 ## Direct JavaScript
 In your project, reference the JavaScript directly, using a relative path.
 ```javascript
-const Cascade = require("../path-to-folder/cascade.js");
+const Cascade = require("./path-to-folder/cascade.js");
 const cascadeAPI = new Cascade("https://cascade.example.edu",{username:"username",password:"password"},"siteName");
 ```
 
@@ -203,9 +203,11 @@ cascadeAPI.readFile("/test/test.txt")
     console.log("Success reading file:");
     const foundFile = response.asset.file;
     
+    // Read local file into a node buffer
     const fs = require('fs');
-    // This converts the node buffer to an array
-    const updateFile = [...fs.readFileSync("./test.txt")];
+    const fileSystemFile = fs.readFileSync("./test.txt");
+    // Converts the node buffer to an array
+    const updateFile = [...fileSystemFile];
 
     foundFile.data = updateFile;
     
@@ -232,6 +234,8 @@ cascadeAPI.readFile("/test/test.txt")
 
 ### Create Page
 When creating a new page, you must send Cascade the asset you'd like to create. You can use the `createBlankPage()` helper function to return a blank asset that you can then edit with the values you want. You can also manually create the object if you prefer.
+
+The asset ID of the newly created page will be returned on success.
 ```javascript
 const newPage = cascadeAPI.createBlankPage();
 newPage.siteName = cascadeAPI.site;
@@ -256,13 +260,14 @@ cascadeAPI.createPage(newPage)
 
 ### Create File
 The same as creating a new page, an asset must be sent when creating a new file. There is a `createBlankFile()` helper function for this as well.
+
+The asset ID of the newly created file will be returned on success.
 ```javascript
 const newFile = cascadeAPI.createBlankFile();
 newFile.siteName = cascadeAPI.site;
 newFile.parentFolderPath = "/test";
 newFile.name = "test.txt";
 newFile.text = "Test";
-console.log(newFile);
 cascadeAPI.createFile(newFile)
 .then(response=>{
     console.log("Success creating file:");
@@ -345,7 +350,7 @@ cascadeAPI.publishFile("/test/test.txt")
 If an operation isn't specified, you can call the `APICall` function directly to acces it. This one lists subscribers for a page: 
 
 ```javascript
-cascadeAPI.APICall("listSubscribers","page","/counseling-programs/index")
+cascadeAPI.APICall("listSubscribers","page","/test/test")
 .then(response=>{
     console.log("Call succeeded");
     console.log(response);
