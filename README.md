@@ -2,27 +2,70 @@
 
 This wraps the [REST API implementation](https://www.hannonhill.com/cascadecms/latest/developing-in-cascade/rest-api/index.html) of [Cascade Server CMS](https://www.hannonhill.com/cascadecms/latest/index.html) into a Node module. While operations have easy to use functions, currently not all APIs do. There is also a generic API Call, which you can use to complete any operation, an example is provided later on.
 
-# Usage
+# Setup
 You can either install it as a node module, adding it to your project dependencies, or directly import the JS file.
 
 ## Node Module
 In your project directory folder run `npm install ../path-to-folder`. Then in your project you can create a new instance:
 ```javascript
 const Cascade = require("./cascade-api-node");
-const cascadeAPI = new Cascade("https://cascade.example.edu","username","password","siteName");
+const cascadeAPI = new Cascade("https://cascade.example.edu",{username:"username",password:"password"},"siteName");
 ```
 
 ## Direct JavaScript
 In your project, reference the JavaScript directly, using a relative path.
 ```javascript
 const Cascade = require("../path-to-folder/cascade.js");
-const cascadeAPI = new Cascade("https://cascade.example.edu","username","password","siteName");
+const cascadeAPI = new Cascade("https://cascade.example.edu",{username:"username",password:"password"},"siteName");
+```
+
+# Usage
+
+## Authentication
+The second parameter is an authentication object, it can either take in a username and password, or an authentication token.
+```javascript
+const cascadeAPI = new Cascade("https://cascade.example.edu",{username:"username",password:"password"},"siteName");
+const cascadeAPI = new Cascade("https://cascade.example.edu",{apiKey:"27c03f58-7c79-45d1-aa8f-76d697bbb10d"},"siteName");
+```
+
+## Using Path vs Using Id
+The site name parameter in the constructor is optional. If left off, all api calls will be done using ids instead.
+
+### With Path
+```javascript
+const cascadeAPI = new Cascade("https://cascade.example.edu",{username:"username",password:"password"},"siteName");
+cascadeAPI.readPage("/test/test")
+.then(response=>{ console.log("Success reading page:"); })
+.catch(error=>{ console.log("Error reading page:"); });
+```
+
+### With Id
+```javascript
+const cascadeAPI = new Cascade("https://cascade.example.edu",{username:"username",password:"password"});
+cascadeAPI.readPage("96dc63ca0a0a008468d68542746cfd37")
+.then(response=>{ console.log("Success reading page:"); })
+.catch(error=>{ console.log("Error reading page:"); });
+```
+
+### Switching Modes
+You can switch between the modes by calling the `usePath()` or `useId()` helper functions.
+```javascript
+const cascadeAPI = new Cascade("https://cascade.example.edu",{username:"username",password:"password"});
+cascadeAPI.readPage("96dc63ca0a0a008468d68542746cfd37")
+.then(response=>{ console.log("Success reading page:"); })
+.catch(error=>{ console.log("Error reading page:"); });
+
+cascadeAPI.usePath("siteName");
+
+cascadeAPI.readPage("/test/test")
+.then(response=>{ console.log("Success reading page:"); })
+.catch(error=>{ console.log("Error reading page:"); });
 ```
 
 ## Return Values
 
 ### On Success
-JSON object will be returned, with a success flag. Depending on the operation an asset is also returned. For example, a read operation for a file might look like:
+JSON object will be returned, with a success flag. Depending on the operation an asset or response might also returned. If an asset is returned, it is contained in a property named after the type. For example, a read operation for a file might look like:
 
 ```javascript
 {
@@ -38,7 +81,6 @@ JSON object will be returned, with a success flag. Depending on the operation an
   success: true
 }
 ```
-*For a page, the asset object attribute will change to page, and for an edit or publish, no asset will be returned.*
 
 ### On Failure
 An error will be thrown, which should be caught client side. An object will be returned with the error message included:
@@ -54,7 +96,7 @@ An error will be thrown, which should be caught client side. An object will be r
 
 ## Examples
 
-Examples will use the variable `cascadeAPI` from above. Most examples will be referring to items by site/path, but one example will show the difference when using IDs.
+Examples will use the variable `cascadeAPI` from above. These examples use paths, but ids can be used instead, as shown in the usage section.
 
 * [Read Page](#read-page)
 * [Read File](#read-file)
@@ -67,7 +109,6 @@ Examples will use the variable `cascadeAPI` from above. Most examples will be re
 * [Publish Page](#publish-page)
 * [Publish File](#publish-file)
 * [Other API Use](#other-api)
-* [Path vs ID](#path-vs-id)
 
 <a name="read-page"/>
 
@@ -130,7 +171,9 @@ cascadeAPI.readPage("/test/test")
 <a name="edit-file"/>
 
 ### Edit File
+Files need to either have something in the `text` property or the `data` property. The `data` property needs to be an array, so if you're reading in via a node buffer, you need to convert it to an array.
 
+#### Update Via Text
 ```javascript
 cascadeAPI.readFile("/test/test.txt")
 .then(response=>{
@@ -153,10 +196,42 @@ cascadeAPI.readFile("/test/test.txt")
 });
 ```
 
+#### Update via node buffer
+```javascript
+cascadeAPI.readFile("/test/test.txt")
+.then(response=>{
+    console.log("Success reading file:");
+    const foundFile = response.asset.file;
+    
+    const fs = require('fs');
+    // This converts the node buffer to an array
+    const updateFile = [...fs.readFileSync("./test.txt")];
+
+    foundFile.data = updateFile;
+    
+    // Make sure to blank out the text field, if using the data property
+    foundFile.text = "";
+
+    cascadeAPI.editFile(foundFile)
+    .then(response=>{
+        console.log("Success editing file:");
+        console.log(response);
+    })
+    .catch(error => {
+        console.log("Error editing file:");
+        console.log(error);
+    });
+})
+.catch(error=>{
+    console.log("Error reading file:");
+    console.log(error);
+});
+```
+
 <a name="create-page"/>
 
 ### Create Page
-
+When creating a new page, you must send Cascade the asset you'd like to create. You can use the `createBlankPage()` helper function to return a blank asset that you can then edit with the values you want. You can also manually create the object if you prefer.
 ```javascript
 const newPage = cascadeAPI.createBlankPage();
 newPage.siteName = cascadeAPI.site;
@@ -166,7 +241,6 @@ newPage.contentTypeId = "5d2be6a80a0a00840dccbc502d7d6505";
 newPage.xhtml = "<div>Test</div>";
 newPage.metadata.title = "New Title";
 newPage.metadata.displayName = "New Display Name";
-console.log(newPage);
 cascadeAPI.createPage(newPage)
 .then(response=>{
     console.log("Success creating page:");
@@ -181,7 +255,7 @@ cascadeAPI.createPage(newPage)
 <a name="create-file"/>
 
 ### Create File
-
+The same as creating a new page, an asset must be sent when creating a new file. There is a `createBlankFile()` helper function for this as well.
 ```javascript
 const newFile = cascadeAPI.createBlankFile();
 newFile.siteName = cascadeAPI.site;
@@ -280,16 +354,4 @@ cascadeAPI.APICall("listSubscribers","page","/counseling-programs/index")
     console.log("Call failed");
     console.log(error);
 });
-```
-
-If the operation requires an asset to be included with it, an object should be sent in as a 4th parameter.
-
-<a name="path-vs-id"/>
-
-### Path vs ID
-
-To be added.
-
-```javascript
-
 ```
