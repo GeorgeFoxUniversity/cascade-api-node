@@ -1,0 +1,15 @@
+{
+  "name": "cascade-api-node",
+  "version": "1.0.0",
+  "description": "Wrapper for the Cascade Server API",
+  "main": "cascade.js",
+  "scripts": {
+    "test": "node test-cascade-api.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.georgefox.edu:marcom/cascade-api-node-package.git"
+  },
+  "author": "Peter Crackenberg",
+  "license": "MIT"
+}
