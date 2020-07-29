@@ -3,23 +3,18 @@
 This wraps the [REST API implementation](https://www.hannonhill.com/cascadecms/latest/developing-in-cascade/rest-api/index.html) of [Cascade Server CMS](https://www.hannonhill.com/cascadecms/latest/index.html) into a Node module. While operations have easy to use functions, currently not all APIs do. There is also a generic API Call, which you can use to complete any operation, an example is provided later on.
 
 # Setup
-You can either install it as a node module, adding it to your project dependencies, or directly import the JS file.
+This is installed as a node module in your project. In your node project, run the following command:
+`npm install git://github.com/GeorgeFoxUniversity/cascade-api-node.git`
 
-## Node Module
-In your project directory folder run `npm install ./path-to-folder`. Then in your project you can create a new instance:
+You can also clone or download the files, and install them locally.
+`npm install ./local-folder-path`
+
+# Usage
+Once it's installed, require it in your node project, to create a new Cascade object. Then you can call functions on that object.
 ```javascript
 const Cascade = require("cascade-api-node");
 const cascadeAPI = new Cascade("https://cascade.example.edu",{username:"username",password:"password"},"siteName");
 ```
-
-## Direct JavaScript
-In your project, reference the JavaScript directly, using a relative path.
-```javascript
-const Cascade = require("./path-to-folder/cascade.js");
-const cascadeAPI = new Cascade("https://cascade.example.edu",{username:"username",password:"password"},"siteName");
-```
-
-# Usage
 
 ## Authentication
 The second parameter is an authentication object, it can either take in a username and password, or an authentication token.
