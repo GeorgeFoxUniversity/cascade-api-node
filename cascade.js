@@ -123,7 +123,6 @@ class Cascade
             {
                 assetObject.page.xhtml = "<system-xml>"+assetObject.page.xhtml+"</system-xml>";
             }
-            console.log(assetObject);
             this.ajaxOptions.body.asset = assetObject;
         }
 
