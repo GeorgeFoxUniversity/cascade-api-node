@@ -119,6 +119,11 @@ class Cascade
         // If we're including an asset, add it to the body
         if(assetObject !== false)
         {
+            if("page" in assetObject && "xhtml" in assetObject.page && assetObject.page.xhtml != "")
+            {
+                assetObject.page.xhtml = "<system-xml>"+assetObject.page.xhtml+"</system-xml>";
+            }
+            console.log(assetObject);
             this.ajaxOptions.body.asset = assetObject;
         }
 
