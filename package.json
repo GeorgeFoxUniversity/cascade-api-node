@@ -11,5 +11,8 @@
     "url": "git@github.com/GeorgeFoxUniversity/cascade-api-node.git"
   },
   "author": "Peter Crackenberg",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  }
 }
