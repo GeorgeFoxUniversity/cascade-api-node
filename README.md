@@ -360,7 +360,7 @@ cascadeAPI.APICall("listSubscribers","page","/test/test")
 
 ### Other API Use: Create Block
 
-If an operation isn't specified, you can call the `APICall` function directly to acces it. This one creates
+If an operation isn't specified, you can call the `APICall` function directly to access it. This one creates
 a new block asset.
 
 
