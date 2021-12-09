@@ -357,3 +357,60 @@ cascadeAPI.APICall("listSubscribers","page","/test/test")
     console.log(error);
 });
 ```
+
+### Other API Use: Create Block
+
+If an operation isn't specified, you can call the `APICall` function directly to acces it. This one creates
+a new block asset.
+
+
+```javascript
+cascadeAPI.APICall("create", false, false, block.asset)
+    .then(function(data) {
+        console.log(`Create ${block.asset.xhtmlDataDefinitionBlock.name} successfully!`);
+    })
+    .catch(function(err) {
+        console.log(err);
+        console.log(`Error creating ${block.asset.xhtmlDataDefinitionBlock.name} block!`);
+    });
+```
+
+Some object is required to pass in the `block.asset`. An example code snippet
+is below. A object can be built with an array or a JSON file, typically.
+
+JSON Example
+```json
+"asset": {
+    "xhtmlDataDefinitionBlock": {
+        "structuredData" : {
+            "definitionId": "[some-data-definition-id]",
+            "structuredDataNodes": []
+        },
+        "siteId": "[some-id]",
+        "parentFolderId": "[some-folder-id]",
+        "name": "[some-name-block]"
+    }
+}
+```
+
+Javascript Example
+```javascript
+const block = {
+    "asset": {
+        "xhtmlDataDefinitionBlock": {
+            "structuredData" : {
+                "definitionId": "[some-data-definition-id]",
+                "structuredDataNodes": []
+                // [] represents an empty array for you to add things to
+            },
+            "siteId": "[some-id]",
+            "parentFolderId": "[some-folder-id]",
+            "name": "[some-name-block]"
+        }
+    }
+}
+
+// [...] represents what you need to pass in.
+
+block.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes.push([...])
+```
