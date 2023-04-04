@@ -1,15 +1,25 @@
 const fetch = require('node-fetch');
 
 /**
- * Class to wrap the Cascade Server API.
+ * Class to wrap REST calls to the Cascade Server API. 
+ * This class operates in two modes, path or identifier. If on path mode, any path listed in the wrapper functions
+ * or `APICall` function will use a path, with the site specified either in the constructor or utility function.
+ * Otherwise it will use a Cascade asset ID. You can swap modes using the [useId]{@link Cascade#useId} or 
+ * [usePath]{@link Cascade#usePath} methods.
+ * 
  */
 class Cascade
 {
     /**
-     * Create a new Cascade object.
-     * @param {*} apiRoot Root URL of your Cascade instance
-     * @param {*} authentication Authentication object, should either have username and password properties or apiKey property
-     * @param {*} site Optional. Site to use if using paths to identify assets.
+     * Create a new Cascade API object. This will build a REST query to the Cascade instance provided in the 
+     * constructor. The class relies on one of two modes to operate in when making calls, paths, or identifiers,
+     * if a site is listed in the constructor, it will use path, otherwise it will use identifier.
+     * @param {string} apiRoot Root URL of your Cascade instance
+     * @param {Object} authentication Authentication object, should either have username and password properties or apiKey property
+     * @param {string} authentication.apiKey API key to make the call with. Either this OR username/password must be included.
+     * @param {string} authentication.username Username to make the call with. Either username & password OR apiKey must be included.
+     * @param {string} authentication.password Password to make the call with. Either username & password OR apiKey must be included.
+     * @param {string} [site] Site to use if using paths to identify assets.
      */
     constructor(apiRoot, authentication, site="")
     {
@@ -32,7 +42,7 @@ class Cascade
 
     /**
      * Change the mode of the Cascade object to use paths.
-     * @param {*} siteName Name of the site to add to calls.
+     * @param {string} siteName Name of the site to add to calls.
      */
     usePath(siteName)
     {
@@ -52,6 +62,7 @@ class Cascade
 
     /**
      * Return a blank page, this is helpful when creating new assets.
+     * @returns {CascadeAsset} Blank page
      */
     createBlankPage()
     {   
@@ -60,6 +71,7 @@ class Cascade
 
     /**
      * Return a blank file, this is helpful when creating new assets.
+     * @returns {CascadeAsset} Blank file
      */
     createBlankFile()
     {
@@ -76,10 +88,12 @@ class Cascade
      * This function is asynchronous, and will either return an object, or throw an error if the call
      * did not succeed. The error should be caught on the front end.
      * 
-     * @param {*} operation Name of the operation as defined in the Cascade API.
-     * @param {*} type Required for calls where an identifier is needed (read, publish, etc)
-     * @param {*} assetIDPath Either the path or id of the asset, needed where an identifier is needed, like type
-     * @param {*} assetObject Asset to be acted upon, needed for some calls (create, edit)
+     * @param {string} operation Name of the operation as defined in the Cascade API.
+     * @param {string} [type=false] Optional. Required for calls where an identifier is needed (read, publish, etc). If not needed use default.
+     * @param {string} [assetIDPath=false] Optional. Either the path or id of the asset, needed where an identifier is needed, like type. If not needed use default.
+     * @param {Object} [assetObject=false] Optional. Asset to be acted upon, needed for some calls (create, edit). Must have an attribute for the asset type that's being acted upon (page, block, etc)
+     * @returns {Object} Cascade response object. It could be either a system response for an operation like create or edit, or an object for an operation like read.
+     * @throws Will throw an error if the Cascade API operation was not successful.
      */
     async APICall(operation,type=false,assetIDPath=false,assetObject=false)
     {
@@ -145,54 +159,116 @@ class Cascade
     }
 
     /**** Wrapper functions ****/
+    
     /**
-     * These functions all use the APICall function with various options, to make it easier to use.
+     * Read a page, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of page to read
+     * @returns {Object} Object representing the Cascade response. Page that was found will be in the .asset.page attribute
+     * @throws Will throw an error if the Cascade API operation was not successful.
      */
     async readPage(path)
     {
         return await this.APICall("read","page",path);
     }
 
+    /**
+     * Read a file, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of file to read
+     * @returns {Object} Object representing the Cascade response. Page that was found will be in the .asset.page attribute
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async readFile(path)
     {
         return await this.APICall("read","file",path);
     }
 
+    /**
+     * Delete a page, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of page to delete
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async deletePage(path)
     {
         return await this.APICall("delete","page",path);
     }
 
+    /**
+     * Delete a file, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of file to delete
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async deleteFile(path)
     {
         return await this.APICall("delete","file",path);
     }
 
+    /**
+     * Edit a page, given a Cascade page object. Typically the page to edit is read in via [readPage]{@link Cascade#readPage},
+     * but it can be manually created as well.
+     * @param {Object} assetObject Cascade object representing the page.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async editPage(assetObject)
     {
         return await this.APICall("edit","page",assetObject.path,{page: assetObject});
     }
 
+    /**
+     * Edit a file, given a Cascade file object. Typically the page to edit is read in via [readFile]{@link Cascade#readFile},
+     * but it can be manually created as well.
+     * @param {Object} assetObject Cascade object representing the file.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async editFile(assetObject)
     {
         return await this.APICall("edit","file",assetObject.path,{file: assetObject});
     }
 
+    /**
+     * Publish a page, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of page to publish.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async publishPage(path)
     {
         return await this.APICall("publish","page",path);
     }
 
+    /**
+     * Publish a file, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of file to publish.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async publishFile(path)
     {
         return await this.APICall("publish","file",path);
     }
 
+    /**
+     * Create a page, given a Cascade page object. Typically this is created using [createBlankPage]{@link Cascade#createBlankPage},
+     * but it can be created manually as well.
+     * @param {Object} assetObject Cascade object representing the page.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async createPage(assetObject)
     {
         return await this.APICall("create",false,false,{page: assetObject});
     }
 
+    /**
+     * Create a file, given a Cascade file object. Typically this is created using [createBlanFile]{@link Cascade#createBlankFile},
+     * but it can be created manually as well.
+     * @param {Object} assetObject Cascade object representing the file.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async createFile(assetObject)
     {
         return await this.APICall("create",false,false,{file: assetObject});
@@ -204,12 +280,18 @@ class Cascade
  * Class to represent assets to submit into Cascade Server. These are generally used
  * when creating a new asset, as it makes it easier than creating the required 
  * properties from scratch.
+ * 
+ * Typically used to create new objects when using the [createPage]{@link Cascade#createPage} and 
+ * [createFile]{@link Cascade#createFile} functions.
+ * 
+ * These are returned by the [createBlankPage]{@link Cascade#createBlankPage} and 
+ * [createBlankFile]{@link Cascade#createBlankFile} methods.
  */
 class CascadeAsset
 {
     /**
      * Create a new CascadeAsset object.
-     * @param {*} type Either page or file, defaults to page.
+     * @param {string} [type=page] Either page or file, defaults to page.
      */
     constructor(type="page")
     {

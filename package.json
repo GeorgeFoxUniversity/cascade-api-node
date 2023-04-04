@@ -1,9 +1,10 @@
 {
   "name": "cascade-api-node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Wrapper for the Cascade Server API",
   "main": "cascade.js",
   "scripts": {
+    "createDocs": "jsdoc2md cascade.js > documentation/cascade-api.md",
     "test": "node test-cascade-api.js"
   },
   "repository": {
@@ -14,5 +15,8 @@
   "license": "MIT",
   "dependencies": {
     "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "jsdoc-to-markdown": "^8.0.0"
   }
 }
