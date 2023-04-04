@@ -306,5 +306,5 @@ Create a new CascadeAsset object.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [type] | <code>string</code> | <code>&quot;\&quot;page\&quot;&quot;</code> | Either page or file, defaults to page. |
+| [type] | <code>string</code> | <code>&quot;page&quot;</code> | Either page or file, defaults to page. |
 
