@@ -100,4 +100,4 @@ Examples will use the variable `cascadeAPI` from above. These examples use paths
 
 ## Full Documentation
 
-Full documentation for every function available [in the JSDocs](cascade-api.md).
+Full documentation for every function available [in the JSDocs](documentation/cascade-api.md).
