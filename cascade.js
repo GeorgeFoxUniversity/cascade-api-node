@@ -291,7 +291,7 @@ class CascadeAsset
 {
     /**
      * Create a new CascadeAsset object.
-     * @param {string} [type="page"] Either page or file, defaults to page.
+     * @param {string} [type=page] Either page or file, defaults to page.
      */
     constructor(type="page")
     {
