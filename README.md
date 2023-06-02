@@ -96,6 +96,7 @@ Examples will use the variable `cascadeAPI` from above. These examples use paths
 
 * [Page Functions](documentation/page-functions.md)
 * [File Functions](documentation/file-functions.md)
+* [Folder Functions](documentation/folder-functions.md)
 * [Other API Uses](documentation/other-api.md)
 
 ## Full Documentation

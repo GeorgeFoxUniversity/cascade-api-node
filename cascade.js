@@ -347,17 +347,17 @@ class Cascade
  * when creating a new asset, as it makes it easier than creating the required 
  * properties from scratch.
  * 
- * Typically used to create new objects when using the [createPage]{@link Cascade#createPage} and 
- * [createFile]{@link Cascade#createFile} functions.
+ * Typically used to create new objects when using the [createPage]{@link Cascade#createPage}, 
+ * [createFile]{@link Cascade#createFile}, and [createFolder]{@link Cascade#createFolder} functions.
  * 
- * These are returned by the [createBlankPage]{@link Cascade#createBlankPage} and 
- * [createBlankFile]{@link Cascade#createBlankFile} methods.
+ * These are returned by the [createBlankPage]{@link Cascade#createBlankPage}, 
+ * [createBlankFile]{@link Cascade#createBlankFile}, and [createBlankFolder]{@link Cascade#createBlankFolder} methods.
  */
 class CascadeAsset
 {
     /**
      * Create a new CascadeAsset object.
-     * @param {string} [type=page] Either page or file, defaults to page.
+     * @param {string} [type=page] Either page, file, or folder. Defaults to page.
      */
     constructor(type="page")
     {

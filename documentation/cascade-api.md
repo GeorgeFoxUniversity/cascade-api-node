@@ -12,10 +12,10 @@ Otherwise it will use a Cascade asset ID. You can swap modes using the <a href="
 <dd><p>Class to represent assets to submit into Cascade Server. These are generally used
 when creating a new asset, as it makes it easier than creating the required 
 properties from scratch.</p>
-<p>Typically used to create new objects when using the <a href="#Cascade+createPage">createPage</a> and 
-<a href="#Cascade+createFile">createFile</a> functions.</p>
-<p>These are returned by the <a href="#Cascade+createBlankPage">createBlankPage</a> and 
-<a href="#Cascade+createBlankFile">createBlankFile</a> methods.</p>
+<p>Typically used to create new objects when using the <a href="#Cascade+createPage">createPage</a>, 
+<a href="#Cascade+createFile">createFile</a>, and <a href="#Cascade+createFolder">createFolder</a> functions.</p>
+<p>These are returned by the <a href="#Cascade+createBlankPage">createBlankPage</a>, 
+<a href="#Cascade+createBlankFile">createBlankFile</a>, and <a href="#Cascade+createBlankFolder">createBlankFolder</a> methods.</p>
 </dd>
 </dl>
 
@@ -386,11 +386,11 @@ Class to represent assets to submit into Cascade Server. These are generally use
 when creating a new asset, as it makes it easier than creating the required 
 properties from scratch.
 
-Typically used to create new objects when using the [createPage](#Cascade+createPage) and 
-[createFile](#Cascade+createFile) functions.
+Typically used to create new objects when using the [createPage](#Cascade+createPage), 
+[createFile](#Cascade+createFile), and [createFolder](#Cascade+createFolder) functions.
 
-These are returned by the [createBlankPage](#Cascade+createBlankPage) and 
-[createBlankFile](#Cascade+createBlankFile) methods.
+These are returned by the [createBlankPage](#Cascade+createBlankPage), 
+[createBlankFile](#Cascade+createBlankFile), and [createBlankFolder](#Cascade+createBlankFolder) methods.
 
 **Kind**: global class  
 <a name="new_CascadeAsset_new"></a>
@@ -401,5 +401,5 @@ Create a new CascadeAsset object.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [type] | <code>string</code> | <code>&quot;page&quot;</code> | Either page or file, defaults to page. |
+| [type] | <code>string</code> | <code>&quot;page&quot;</code> | Either page, file, or folder. Defaults to page. |
 
