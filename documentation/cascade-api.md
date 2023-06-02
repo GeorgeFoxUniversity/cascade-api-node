@@ -36,17 +36,23 @@ Otherwise it will use a Cascade asset ID. You can swap modes using the [useId](#
     * [.useId()](#Cascade+useId)
     * [.createBlankPage()](#Cascade+createBlankPage) ⇒ [<code>CascadeAsset</code>](#CascadeAsset)
     * [.createBlankFile()](#Cascade+createBlankFile) ⇒ [<code>CascadeAsset</code>](#CascadeAsset)
+    * [.createBlankFolder()](#Cascade+createBlankFolder) ⇒ [<code>CascadeAsset</code>](#CascadeAsset)
     * [.APICall(operation, [type], [assetIDPath], [assetObject])](#Cascade+APICall) ⇒ <code>Object</code>
     * [.readPage(path)](#Cascade+readPage) ⇒ <code>Object</code>
     * [.readFile(path)](#Cascade+readFile) ⇒ <code>Object</code>
+    * [.readFolder(path)](#Cascade+readFolder) ⇒ <code>Object</code>
     * [.deletePage(path)](#Cascade+deletePage) ⇒ <code>Object</code>
     * [.deleteFile(path)](#Cascade+deleteFile) ⇒ <code>Object</code>
+    * [.deleteFolder(path)](#Cascade+deleteFolder) ⇒ <code>Object</code>
     * [.editPage(assetObject)](#Cascade+editPage) ⇒ <code>Object</code>
     * [.editFile(assetObject)](#Cascade+editFile) ⇒ <code>Object</code>
+    * [.editFolder(assetObject)](#Cascade+editFolder) ⇒ <code>Object</code>
     * [.publishPage(path)](#Cascade+publishPage) ⇒ <code>Object</code>
     * [.publishFile(path)](#Cascade+publishFile) ⇒ <code>Object</code>
+    * [.publishFolder(path)](#Cascade+publishFolder) ⇒ <code>Object</code>
     * [.createPage(assetObject)](#Cascade+createPage) ⇒ <code>Object</code>
     * [.createFile(assetObject)](#Cascade+createFile) ⇒ <code>Object</code>
+    * [.createFolder(assetObject)](#Cascade+createFolder) ⇒ <code>Object</code>
 
 <a name="new_Cascade_new"></a>
 
@@ -96,6 +102,13 @@ Return a blank file, this is helpful when creating new assets.
 
 **Kind**: instance method of [<code>Cascade</code>](#Cascade)  
 **Returns**: [<code>CascadeAsset</code>](#CascadeAsset) - Blank file  
+<a name="Cascade+createBlankFolder"></a>
+
+### cascade.createBlankFolder() ⇒ [<code>CascadeAsset</code>](#CascadeAsset)
+Return a blank folder, this is helpful when creating new assets.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: [<code>CascadeAsset</code>](#CascadeAsset) - Blank folder  
 <a name="Cascade+APICall"></a>
 
 ### cascade.APICall(operation, [type], [assetIDPath], [assetObject]) ⇒ <code>Object</code>
@@ -152,6 +165,22 @@ Read a file, given a path or ID (depending on the mode of the Cascade object) an
 | --- | --- | --- |
 | path | <code>string</code> | Path or ID of file to read |
 
+<a name="Cascade+readFolder"></a>
+
+### cascade.readFolder(path) ⇒ <code>Object</code>
+Read a folder, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: <code>Object</code> - Object representing the Cascade response. Page that was found will be in the .asset.page attribute  
+**Throws**:
+
+- Will throw an error if the Cascade API operation was not successful.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Path or ID of folder to read |
+
 <a name="Cascade+deletePage"></a>
 
 ### cascade.deletePage(path) ⇒ <code>Object</code>
@@ -183,6 +212,22 @@ Delete a file, given a path or ID (depending on the mode of the Cascade object) 
 | Param | Type | Description |
 | --- | --- | --- |
 | path | <code>string</code> | Path or ID of file to delete |
+
+<a name="Cascade+deleteFolder"></a>
+
+### cascade.deleteFolder(path) ⇒ <code>Object</code>
+Delete a folder, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: <code>Object</code> - Object representing the Cascade response.  
+**Throws**:
+
+- Will throw an error if the Cascade API operation was not successful.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Path or ID of folder to delete |
 
 <a name="Cascade+editPage"></a>
 
@@ -218,6 +263,23 @@ but it can be manually created as well.
 | --- | --- | --- |
 | assetObject | <code>Object</code> | Cascade object representing the file. |
 
+<a name="Cascade+editFolder"></a>
+
+### cascade.editFolder(assetObject) ⇒ <code>Object</code>
+Edit a folder, given a Cascade folder object. Typically the page to edit is read in via [readFolder](#Cascade+readFolder),
+but it can be manually created as well.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: <code>Object</code> - Object representing the Cascade response.  
+**Throws**:
+
+- Will throw an error if the Cascade API operation was not successful.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| assetObject | <code>Object</code> | Cascade object representing the folder. |
+
 <a name="Cascade+publishPage"></a>
 
 ### cascade.publishPage(path) ⇒ <code>Object</code>
@@ -250,6 +312,22 @@ Publish a file, given a path or ID (depending on the mode of the Cascade object)
 | --- | --- | --- |
 | path | <code>string</code> | Path or ID of file to publish. |
 
+<a name="Cascade+publishFolder"></a>
+
+### cascade.publishFolder(path) ⇒ <code>Object</code>
+Publish a folder, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: <code>Object</code> - Object representing the Cascade response.  
+**Throws**:
+
+- Will throw an error if the Cascade API operation was not successful.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Path or ID of folder to publish. |
+
 <a name="Cascade+createPage"></a>
 
 ### cascade.createPage(assetObject) ⇒ <code>Object</code>
@@ -270,7 +348,7 @@ but it can be created manually as well.
 <a name="Cascade+createFile"></a>
 
 ### cascade.createFile(assetObject) ⇒ <code>Object</code>
-Create a file, given a Cascade file object. Typically this is created using [createBlanFile](#Cascade+createBlankFile),
+Create a file, given a Cascade file object. Typically this is created using [createBlankFile](#Cascade+createBlankFile),
 but it can be created manually as well.
 
 **Kind**: instance method of [<code>Cascade</code>](#Cascade)  
@@ -283,6 +361,23 @@ but it can be created manually as well.
 | Param | Type | Description |
 | --- | --- | --- |
 | assetObject | <code>Object</code> | Cascade object representing the file. |
+
+<a name="Cascade+createFolder"></a>
+
+### cascade.createFolder(assetObject) ⇒ <code>Object</code>
+Create a folder, given a Cascade folder object. Typically this is created using [createBlankFolder](#Cascade+createBlankFolder),
+but it can be created manually as well.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: <code>Object</code> - Object representing the Cascade response.  
+**Throws**:
+
+- Will throw an error if the Cascade API operation was not successful.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| assetObject | <code>Object</code> | Cascade object representing the folder. |
 
 <a name="CascadeAsset"></a>
 

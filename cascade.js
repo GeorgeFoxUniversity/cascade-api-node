@@ -78,6 +78,15 @@ class Cascade
         return new CascadeAsset("file");
     }
 
+    /**
+     * Return a blank folder, this is helpful when creating new assets.
+     * @returns {CascadeAsset} Blank folder
+     */
+    createBlankFolder()
+    {
+        return new CascadeAsset("folder");
+    }
+
     /**** API Functions ****/
 
     /**
@@ -183,6 +192,17 @@ class Cascade
     }
 
     /**
+     * Read a folder, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of folder to read
+     * @returns {Object} Object representing the Cascade response. Page that was found will be in the .asset.page attribute
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async readFolder(path)
+    {
+        return await this.APICall("read","folder",path);
+    }
+
+    /**
      * Delete a page, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
      * @param {string} path Path or ID of page to delete
      * @returns {Object} Object representing the Cascade response.
@@ -202,6 +222,17 @@ class Cascade
     async deleteFile(path)
     {
         return await this.APICall("delete","file",path);
+    }
+
+    /**
+     * Delete a folder, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of folder to delete
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async deleteFolder(path)
+    {
+        return await this.APICall("delete","folder",path);
     }
 
     /**
@@ -229,6 +260,18 @@ class Cascade
     }
 
     /**
+     * Edit a folder, given a Cascade folder object. Typically the page to edit is read in via [readFolder]{@link Cascade#readFolder},
+     * but it can be manually created as well.
+     * @param {Object} assetObject Cascade object representing the folder.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async editFolder(assetObject)
+    {
+        return await this.APICall("edit","folder",assetObject.path,{folder: assetObject});
+    }
+
+    /**
      * Publish a page, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
      * @param {string} path Path or ID of page to publish.
      * @returns {Object} Object representing the Cascade response.
@@ -251,6 +294,17 @@ class Cascade
     }
 
     /**
+     * Publish a folder, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of folder to publish.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async publishFolder(path)
+    {
+        return await this.APICall("publish","folder",path);
+    }
+
+    /**
      * Create a page, given a Cascade page object. Typically this is created using [createBlankPage]{@link Cascade#createBlankPage},
      * but it can be created manually as well.
      * @param {Object} assetObject Cascade object representing the page.
@@ -263,7 +317,7 @@ class Cascade
     }
 
     /**
-     * Create a file, given a Cascade file object. Typically this is created using [createBlanFile]{@link Cascade#createBlankFile},
+     * Create a file, given a Cascade file object. Typically this is created using [createBlankFile]{@link Cascade#createBlankFile},
      * but it can be created manually as well.
      * @param {Object} assetObject Cascade object representing the file.
      * @returns {Object} Object representing the Cascade response.
@@ -272,6 +326,18 @@ class Cascade
     async createFile(assetObject)
     {
         return await this.APICall("create",false,false,{file: assetObject});
+    }
+
+    /**
+     * Create a folder, given a Cascade folder object. Typically this is created using [createBlankFolder]{@link Cascade#createBlankFolder},
+     * but it can be created manually as well.
+     * @param {Object} assetObject Cascade object representing the folder.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async createFolder(assetObject)
+    {
+        return await this.APICall("create",false,false,{folder: assetObject});
     }
 
 }
