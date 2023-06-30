@@ -101,10 +101,11 @@ class Cascade
      * @param {string} [type=false] Optional. Required for calls where an identifier is needed (read, publish, etc). If not needed use default.
      * @param {string} [assetIDPath=false] Optional. Either the path or id of the asset, needed where an identifier is needed, like type. If not needed use default.
      * @param {Object} [assetObject=false] Optional. Asset to be acted upon, needed for some calls (create, edit). Must have an attribute for the asset type that's being acted upon (page, block, etc)
+     * @param {Object} [ajaxParameters=false] Optional. Parameters to be added to the body, examples being copyParameters or moveParameters which are required for those operations.
      * @returns {Object} Cascade response object. It could be either a system response for an operation like create or edit, or an object for an operation like read.
      * @throws Will throw an error if the Cascade API operation was not successful.
      */
-    async APICall(operation,type=false,assetIDPath=false,assetObject=false)
+    async APICall(operation,type=false,assetIDPath=false,assetObject=false,ajaxParameters=false)
     {
         // Build the url to call
         this.ajaxURL = this.apiRoot+"/api/v1/"+operation;
@@ -147,6 +148,12 @@ class Cascade
                 assetObject.page.xhtml = "<system-xml>"+assetObject.page.xhtml+"</system-xml>";
             }
             this.ajaxOptions.body.asset = assetObject;
+        }
+
+        // CHeck to see if there are additional parameters that need to be added to the body, and add them if needed.
+        if(typeof ajaxParameters === "object")
+        {
+            this.ajaxOptions.body = { ...this.ajaxOptions.body, ...ajaxParameters }
         }
 
         // Turn the body message into a JSON string to send it along
@@ -338,6 +345,123 @@ class Cascade
     async createFolder(assetObject)
     {
         return await this.APICall("create",false,false,{folder: assetObject});
+    }
+
+    async movePage(path,newName,folderPath)
+    {
+        return await this.doMove(path,newName,folderPath, "page");
+    }
+
+    async moveFile(path,newName,folderPath)
+    {
+        return await this.doMove(path,newName,folderPath, "file");
+    }
+
+    async moveFolder(path,newName,folderPath)
+    {
+        return await this.doMove(path,newName,folderPath, "folder");
+    }
+
+    async doMove(path,newName,folderPath, type)
+    {
+        const moveParameters = {
+            "destinationContainerIdentifier": {
+                "type": "folder"
+            },
+            "doWorkflow": "false",
+            "newName": newName
+        };
+
+        if(folderPath.hasOwnProperty("path") && !folderPath.hasOwnProperty("siteName") && this.identificationMode === "path")
+        {
+            folderPath.siteName = this.site;
+        }
+        
+        if(folderPath.hasOwnProperty("path"))
+        {
+            moveParameters.destinationContainerIdentifier.path = folderPath;
+        }
+        else if(folderPath.hasOwnProperty("id"))
+        {
+            moveParameters.destinationContainerIdentifier.id = folderPath.id;
+        }
+
+        return await this.APICall("move", type, path, false, {"moveParameters": moveParameters});
+    }
+
+    async copyPage(path,newName,folderPath)
+    {
+        return await this.makeCopy(path,newName,folderPath,"page");
+    }
+
+    async copyFile(path,newName,folderPath)
+    {
+        return await this.makeCopy(path,newName,folderPath,"file");
+    }
+
+    async copyFolder(path,newName,folderPath)
+    {
+        return await this.makeCopy(path,newName,folderPath,"folder");
+    }
+
+    async makeCopy(path,newName,folderPath, type)
+    {
+        const copyParameters = {
+            "destinationContainerIdentifier": {
+                "type": "folder"
+            },
+            "doWorkflow": "false",
+            "newName": newName
+        };
+
+        if(folderPath.hasOwnProperty("path") && !folderPath.hasOwnProperty("siteName") && this.identificationMode === "path")
+        {
+            folderPath.siteName = this.site;
+        }
+        
+        if(folderPath.hasOwnProperty("path"))
+        {
+            copyParameters.destinationContainerIdentifier.path = folderPath;
+        }
+        else if(folderPath.hasOwnProperty("id"))
+        {
+            copyParameters.destinationContainerIdentifier.id = folderPath.id;
+        }
+
+        return await this.APICall("copy", type, path, false, {"copyParameters": copyParameters});
+    }
+
+    /**
+     * Check relationships for a page, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of page to check.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async checkRelationshipsPage(path)
+    {
+        return await this.APICall("listSubscribers","page",path);
+    }
+
+    /**
+     * Check relationships for a file, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of file to check.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async checkRelationshipsFile(path)
+    {
+        return await this.APICall("listSubscribers","file",path);
+    }
+
+    /**
+     * Check relationships for a folder, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of folder to check.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async checkRelationshipsFolder(path)
+    {
+        return await this.APICall("listSubscribers","folder",path);
     }
 
 }

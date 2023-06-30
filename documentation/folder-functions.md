@@ -86,3 +86,17 @@ cascadeAPI.publishFolder("/test/test2")
     console.error(error);
 });
 ```
+
+## Check Folder Relationships
+
+```javascript
+cascadeAPI.checkRelationshipsFolder("/test")
+.then(response=>{
+    console.log("Success getting relationships:");
+    console.log(response);
+})
+.catch(error=>{
+    console.error("Error getting relationships:");
+    console.error(error);
+});
+```

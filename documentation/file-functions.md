@@ -122,3 +122,17 @@ cascadeAPI.publishFile("/test/test.txt")
     console.log(error);
 });
 ```
+
+## Check File Relationships
+
+```javascript
+cascadeAPI.checkRelationshipsFile("/test/image.jpg")
+.then(response=>{
+    console.log("Success getting relationships:");
+    console.log(response);
+})
+.catch(error=>{
+    console.error("Error getting relationships:");
+    console.error(error);
+});
+```
