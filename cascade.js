@@ -347,21 +347,65 @@ class Cascade
         return await this.APICall("create",false,false,{folder: assetObject});
     }
 
+    /**
+     * Do a move operation on a page, given a path, name, and folder. Unlike the Move and Rename operations in Cascade,
+     * which have separate functionality, this combines them into a single operation.
+     * 
+     * @param {string} path Path or ID of the page to move.
+     * @param {string} newName New name of the page. If the asset is being moved to a different folder, this can be the same as the current name.
+     * @param {string} folderPath Path or ID of the folder to move to. If the asset is not being moved to a different folder, this can be the same as the current folder.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async movePage(path,newName,folderPath)
     {
         return await this.doMove(path,newName,folderPath, "page");
     }
 
+    /**
+     * Do a move operation on a file, given a path, name, and folder. Unlike the Move and Rename operations in Cascade,
+     * which have separate functionality, this combines them into a single operation.
+     * 
+     * @param {string} path Path or ID of the file to move.
+     * @param {string} newName New name of the file. If the asset is being moved to a different folder, this can be the same as the current name.
+     * @param {string} folderPath Path or ID of the folder to move to. If the asset is not being moved to a different folder, this can be the same as the current folder.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async moveFile(path,newName,folderPath)
     {
         return await this.doMove(path,newName,folderPath, "file");
     }
 
+    /**
+     * Do a move operation on a folder, given a path, name, and folder. Unlike the Move and Rename operations in Cascade,
+     * which have separate functionality, this combines them into a single operation.
+     * 
+     * @param {string} path Path or ID of the folder to move.
+     * @param {string} newName New name of the folder. If the asset is being moved to a different folder, this can be the same as the current name.
+     * @param {string} folderPath Path or ID of the folder to move to. If the asset is not being moved to a different folder, this can be the same as the current folder.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async moveFolder(path,newName,folderPath)
     {
         return await this.doMove(path,newName,folderPath, "folder");
     }
 
+    /**
+     * Do a move operation on an asset, given a path, name, folder, and type. Unlike the Move and Rename operations in Cascade,
+     * which have separate functionality, this combines them into a single operation.
+     * 
+     * This should generally not be called directly, and instead a wrapper function like [movePage]{@link Cascade#movePage} or [moveFile]{@link Cascade#moveFile} should
+     * be used instead. But if you need to move or rename an asset that doesn't have a type this can be used.
+     * 
+     * @param {string} path Path or ID of the asset to move.
+     * @param {string} newName New name of the asset. If the asset is being moved to a different folder, this can be the same as the current name.
+     * @param {string} folderPath Path or ID of the folder to move to. If the asset is not being moved to a different folder, this can be the same as the current folder.
+     * @param {string} type Type of the asset being moved.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async doMove(path,newName,folderPath, type)
     {
         const moveParameters = {
@@ -389,21 +433,56 @@ class Cascade
         return await this.APICall("move", type, path, false, {"moveParameters": moveParameters});
     }
 
+    /**
+     * Make a copy of a a page, given a path, type, new name, and folder.
+     * @param {string} path Path or ID of page to copy.
+     * @param {string} newName New name of the page. If the asset is being copied to a different folder, this can be the same as the current name.
+     * @param {string} folderPath Path or ID of the folder to copy to. If the asset is not being copied to a different folder, this can be the same as the current folder.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async copyPage(path,newName,folderPath)
     {
         return await this.makeCopy(path,newName,folderPath,"page");
     }
 
+    /**
+     * Make a copy of a a file, given a path, type, new name, and folder.
+     * @param {string} path Path or ID of file to copy.
+     * @param {string} newName New name of the file. If the asset is being copied to a different folder, this can be the same as the current name.
+     * @param {string} folderPath Path or ID of the folder to copy to. If the asset is not being copied to a different folder, this can be the same as the current folder.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async copyFile(path,newName,folderPath)
     {
         return await this.makeCopy(path,newName,folderPath,"file");
     }
 
+    /**
+     * Make a copy of a a folder, given a path, type, new name, and folder.
+     * @param {string} path Path or ID of folder to copy.
+     * @param {string} newName New name of the folder. If the asset is being copied to a different folder, this can be the same as the current name.
+     * @param {string} folderPath Path or ID of the folder to copy to. If the asset is not being copied to a different folder, this can be the same as the current folder.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async copyFolder(path,newName,folderPath)
     {
         return await this.makeCopy(path,newName,folderPath,"folder");
     }
 
+    /**
+     * Make a copy of an asset, given a path, type, new name, and folder. This should generally not be called directly,
+     * and instead a wrapper method like [copyPage]{@link Cascade#copyPage} or [copyFile]{@link Cascade#copyFile} should
+     * be used. If the type doesn't have a wrapper function, this can be used instead.
+     * @param {string} path Path or ID of asset to copy.
+     * @param {string} newName New name of the item to use. If the asset is being copied to a different folder, this can be the same as the current name.
+     * @param {string} folderPath Path or ID of the folder to copy to. If the asset is not being copied to a different folder, this can be the same as the current folder.
+     * @param {string} type Type of the asset being copied.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
     async makeCopy(path,newName,folderPath, type)
     {
         const copyParameters = {
