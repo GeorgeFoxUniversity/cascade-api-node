@@ -174,7 +174,7 @@ cascadeAPI.deleteFolder("/test/test2")
 /*
 const newBlock = cascadeAPI.createBlankBlockDataDef();
 newBlock.siteName = cascadeAPI.site;
-newBlock.parentFolderPath = "/test/_assets-page-1";
+newBlock.parentFolderPath = "/test";
 newBlock.name = "test-block";
 newBlock.metadataSetPath = "Default";
 newBlock.xhtml = "<p>Test content</p>";
