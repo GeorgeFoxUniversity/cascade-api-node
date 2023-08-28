@@ -36,33 +36,41 @@ Otherwise it will use a Cascade asset ID. You can swap modes using the [useId](#
     * [.useId()](#Cascade+useId)
     * [.createBlankPage()](#Cascade+createBlankPage) ⇒ [<code>CascadeAsset</code>](#CascadeAsset)
     * [.createBlankFile()](#Cascade+createBlankFile) ⇒ [<code>CascadeAsset</code>](#CascadeAsset)
+    * [.createBlankBlockDataDef()](#Cascade+createBlankBlockDataDef) ⇒ [<code>CascadeAsset</code>](#CascadeAsset)
     * [.createBlankFolder()](#Cascade+createBlankFolder) ⇒ [<code>CascadeAsset</code>](#CascadeAsset)
     * [.APICall(operation, [type], [assetIDPath], [assetObject], [ajaxParameters])](#Cascade+APICall) ⇒ <code>Object</code>
     * [.readPage(path)](#Cascade+readPage) ⇒ <code>Object</code>
     * [.readFile(path)](#Cascade+readFile) ⇒ <code>Object</code>
+    * [.readBlock(path)](#Cascade+readBlock) ⇒ <code>Object</code>
     * [.readFolder(path)](#Cascade+readFolder) ⇒ <code>Object</code>
     * [.deletePage(path)](#Cascade+deletePage) ⇒ <code>Object</code>
     * [.deleteFile(path)](#Cascade+deleteFile) ⇒ <code>Object</code>
+    * [.deleteBlock(path)](#Cascade+deleteBlock) ⇒ <code>Object</code>
     * [.deleteFolder(path)](#Cascade+deleteFolder) ⇒ <code>Object</code>
     * [.editPage(assetObject)](#Cascade+editPage) ⇒ <code>Object</code>
     * [.editFile(assetObject)](#Cascade+editFile) ⇒ <code>Object</code>
+    * [.editBlock(assetObject, [blockType])](#Cascade+editBlock) ⇒ <code>Object</code>
     * [.editFolder(assetObject)](#Cascade+editFolder) ⇒ <code>Object</code>
     * [.publishPage(path)](#Cascade+publishPage) ⇒ <code>Object</code>
     * [.publishFile(path)](#Cascade+publishFile) ⇒ <code>Object</code>
     * [.publishFolder(path)](#Cascade+publishFolder) ⇒ <code>Object</code>
     * [.createPage(assetObject)](#Cascade+createPage) ⇒ <code>Object</code>
     * [.createFile(assetObject)](#Cascade+createFile) ⇒ <code>Object</code>
+    * [.createBlock(assetObject, [blockType])](#Cascade+createBlock) ⇒ <code>Object</code>
     * [.createFolder(assetObject)](#Cascade+createFolder) ⇒ <code>Object</code>
     * [.movePage(path, newName, folderPath)](#Cascade+movePage) ⇒ <code>Object</code>
     * [.moveFile(path, newName, folderPath)](#Cascade+moveFile) ⇒ <code>Object</code>
+    * [.moveBlock(path, newName, folderPath)](#Cascade+moveBlock) ⇒ <code>Object</code>
     * [.moveFolder(path, newName, folderPath)](#Cascade+moveFolder) ⇒ <code>Object</code>
     * [.doMove(path, newName, folderPath, type)](#Cascade+doMove) ⇒ <code>Object</code>
     * [.copyPage(path, newName, folderPath)](#Cascade+copyPage) ⇒ <code>Object</code>
     * [.copyFile(path, newName, folderPath)](#Cascade+copyFile) ⇒ <code>Object</code>
+    * [.copyBlock(path, newName, folderPath)](#Cascade+copyBlock) ⇒ <code>Object</code>
     * [.copyFolder(path, newName, folderPath)](#Cascade+copyFolder) ⇒ <code>Object</code>
     * [.makeCopy(path, newName, folderPath, type)](#Cascade+makeCopy) ⇒ <code>Object</code>
     * [.checkRelationshipsPage(path)](#Cascade+checkRelationshipsPage) ⇒ <code>Object</code>
     * [.checkRelationshipsFile(path)](#Cascade+checkRelationshipsFile) ⇒ <code>Object</code>
+    * [.checkRelationshipsBlock(path)](#Cascade+checkRelationshipsBlock) ⇒ <code>Object</code>
     * [.checkRelationshipsFolder(path)](#Cascade+checkRelationshipsFolder) ⇒ <code>Object</code>
 
 <a name="new_Cascade_new"></a>
@@ -109,10 +117,19 @@ Return a blank page, this is helpful when creating new assets.
 <a name="Cascade+createBlankFile"></a>
 
 ### cascade.createBlankFile() ⇒ [<code>CascadeAsset</code>](#CascadeAsset)
-Return a blank file, this is helpful when creating new assets.
+Return a blank file, this is helpful when creating new assets. This should either have information in the
+`data` attribute, or text in the `text` attribute.
 
 **Kind**: instance method of [<code>Cascade</code>](#Cascade)  
 **Returns**: [<code>CascadeAsset</code>](#CascadeAsset) - Blank file  
+<a name="Cascade+createBlankBlockDataDef"></a>
+
+### cascade.createBlankBlockDataDef() ⇒ [<code>CascadeAsset</code>](#CascadeAsset)
+Return a blank XHTML/Data Definition block, this is helpful when creating new assets. This should either
+have properly escaped XHTML in the `xhtml` attribute, or a structured data object in the `structuredData` attribute.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: [<code>CascadeAsset</code>](#CascadeAsset) - Blank block  
 <a name="Cascade+createBlankFolder"></a>
 
 ### cascade.createBlankFolder() ⇒ [<code>CascadeAsset</code>](#CascadeAsset)
@@ -177,6 +194,22 @@ Read a file, given a path or ID (depending on the mode of the Cascade object) an
 | --- | --- | --- |
 | path | <code>string</code> | Path or ID of file to read |
 
+<a name="Cascade+readBlock"></a>
+
+### cascade.readBlock(path) ⇒ <code>Object</code>
+Read a block, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: <code>Object</code> - Object representing the Cascade response. Block that was found will depend on what type of block it was  
+**Throws**:
+
+- Will throw an error if the Cascade API operation was not successful.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Path or ID of block to read |
+
 <a name="Cascade+readFolder"></a>
 
 ### cascade.readFolder(path) ⇒ <code>Object</code>
@@ -225,6 +258,22 @@ Delete a file, given a path or ID (depending on the mode of the Cascade object) 
 | --- | --- | --- |
 | path | <code>string</code> | Path or ID of file to delete |
 
+<a name="Cascade+deleteBlock"></a>
+
+### cascade.deleteBlock(path) ⇒ <code>Object</code>
+Delete a block, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: <code>Object</code> - Object representing the Cascade response.  
+**Throws**:
+
+- Will throw an error if the Cascade API operation was not successful.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Path or ID of block to delete |
+
 <a name="Cascade+deleteFolder"></a>
 
 ### cascade.deleteFolder(path) ⇒ <code>Object</code>
@@ -261,7 +310,7 @@ but it can be manually created as well.
 <a name="Cascade+editFile"></a>
 
 ### cascade.editFile(assetObject) ⇒ <code>Object</code>
-Edit a file, given a Cascade file object. Typically the page to edit is read in via [readFile](#Cascade+readFile),
+Edit a file, given a Cascade file object. Typically the file to edit is read in via [readFile](#Cascade+readFile),
 but it can be manually created as well.
 
 **Kind**: instance method of [<code>Cascade</code>](#Cascade)  
@@ -275,10 +324,30 @@ but it can be manually created as well.
 | --- | --- | --- |
 | assetObject | <code>Object</code> | Cascade object representing the file. |
 
+<a name="Cascade+editBlock"></a>
+
+### cascade.editBlock(assetObject, [blockType]) ⇒ <code>Object</code>
+Edit a block, given a Cascade block object. Typically the block to edit is read in via [readBlock](#Cascade+readBlock),
+but it can be manually created as well.
+
+Unlike other assets, blocks need to specify
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: <code>Object</code> - Object representing the Cascade response.  
+**Throws**:
+
+- Will throw an error if the Cascade API operation was not successful.
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| assetObject | <code>Object</code> |  | Cascade object representing the block. |
+| [blockType] | <code>string</code> | <code>&quot;xhtmlDataDefinitionBlock&quot;</code> | Type of the block to interact with, this defaults to an XHTML/Data Defintion Block |
+
 <a name="Cascade+editFolder"></a>
 
 ### cascade.editFolder(assetObject) ⇒ <code>Object</code>
-Edit a folder, given a Cascade folder object. Typically the page to edit is read in via [readFolder](#Cascade+readFolder),
+Edit a folder, given a Cascade folder object. Typically the folder to edit is read in via [readFolder](#Cascade+readFolder),
 but it can be manually created as well.
 
 **Kind**: instance method of [<code>Cascade</code>](#Cascade)  
@@ -374,6 +443,24 @@ but it can be created manually as well.
 | --- | --- | --- |
 | assetObject | <code>Object</code> | Cascade object representing the file. |
 
+<a name="Cascade+createBlock"></a>
+
+### cascade.createBlock(assetObject, [blockType]) ⇒ <code>Object</code>
+Create a block, given a Cascade block object. Typically this is created using [createBlankBlockDataDef](#Cascade+createBlankBlockDataDef),
+but it can be created manually as well.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: <code>Object</code> - Object representing the Cascade response.  
+**Throws**:
+
+- Will throw an error if the Cascade API operation was not successful.
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| assetObject | <code>Object</code> |  | Cascade object representing the block. |
+| [blockType] | <code>string</code> | <code>&quot;xhtmlDataDefinitionBlock&quot;</code> | Type of the block to interact with, this defaults to an XHTML/Data Defintion Block |
+
 <a name="Cascade+createFolder"></a>
 
 ### cascade.createFolder(assetObject) ⇒ <code>Object</code>
@@ -428,6 +515,25 @@ which have separate functionality, this combines them into a single operation.
 | path | <code>string</code> | Path or ID of the file to move. |
 | newName | <code>string</code> | New name of the file. If the asset is being moved to a different folder, this can be the same as the current name. |
 | folderPath | <code>string</code> | Path or ID of the folder to move to. If the asset is not being moved to a different folder, this can be the same as the current folder. |
+
+<a name="Cascade+moveBlock"></a>
+
+### cascade.moveBlock(path, newName, folderPath) ⇒ <code>Object</code>
+Do a move operation on a block, given a path, name, and folder. Unlike the Move and Rename operations in Cascade,
+which have separate functionality, this combines them into a single operation.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: <code>Object</code> - Object representing the Cascade response.  
+**Throws**:
+
+- Will throw an error if the Cascade API operation was not successful.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Path or ID of the block to move. |
+| newName | <code>string</code> | New name of the block. If the asset is being moved to a different folder, this can be the same as the current name. |
+| folderPath | <code>string</code> | Path or ID of the block to move to. If the asset is not being moved to a different folder, this can be the same as the current folder. |
 
 <a name="Cascade+moveFolder"></a>
 
@@ -507,6 +613,24 @@ Make a copy of a a file, given a path, type, new name, and folder.
 | newName | <code>string</code> | New name of the file. If the asset is being copied to a different folder, this can be the same as the current name. |
 | folderPath | <code>string</code> | Path or ID of the folder to copy to. If the asset is not being copied to a different folder, this can be the same as the current folder. |
 
+<a name="Cascade+copyBlock"></a>
+
+### cascade.copyBlock(path, newName, folderPath) ⇒ <code>Object</code>
+Make a copy of a a block, given a path, type, new name, and folder.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: <code>Object</code> - Object representing the Cascade response.  
+**Throws**:
+
+- Will throw an error if the Cascade API operation was not successful.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Path or ID of block to copy. |
+| newName | <code>string</code> | New name of the block. If the asset is being copied to a different folder, this can be the same as the current name. |
+| folderPath | <code>string</code> | Path or ID of the folder to copy to. If the asset is not being copied to a different folder, this can be the same as the current folder. |
+
 <a name="Cascade+copyFolder"></a>
 
 ### cascade.copyFolder(path, newName, folderPath) ⇒ <code>Object</code>
@@ -565,6 +689,22 @@ Check relationships for a page, given a path or ID (depending on the mode of the
 <a name="Cascade+checkRelationshipsFile"></a>
 
 ### cascade.checkRelationshipsFile(path) ⇒ <code>Object</code>
+Check relationships for a file, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+
+**Kind**: instance method of [<code>Cascade</code>](#Cascade)  
+**Returns**: <code>Object</code> - Object representing the Cascade response.  
+**Throws**:
+
+- Will throw an error if the Cascade API operation was not successful.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Path or ID of file to check. |
+
+<a name="Cascade+checkRelationshipsBlock"></a>
+
+### cascade.checkRelationshipsBlock(path) ⇒ <code>Object</code>
 Check relationships for a file, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
 
 **Kind**: instance method of [<code>Cascade</code>](#Cascade)  
