@@ -3,7 +3,7 @@
 const Cascade = require("./cascade.js");
 
 // Replace values with your Cascade API URL, password, and site
-const cascadeAPI = new Cascade("https://cascade.georgefox.edu",{apiKey: "API_KEY"},"www Redesign");
+const cascadeAPI = new Cascade("https://cascade.georgefox.edu",{apiKey: "API_KEY"},"SITE_NAME");
 
 // Example reading a page
 /*
