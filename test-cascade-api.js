@@ -35,7 +35,7 @@ cascadeAPI.readPage("96dc63ca0a0a008468d68542746cfd37")
 
 // Example reading a file
 /*
-cascadeAPI.readFile("/template/t1/css/main.css")
+cascadeAPI.readFile("/test/file.css")
 .then(response=>{
     console.log("Success reading file:");
     console.log(response);
@@ -56,6 +56,19 @@ cascadeAPI.readFolder("/test")
 .catch(error=>{
     console.error("Erroring reading folder:");
     console.error(error);
+});
+*/
+
+// Example reading a block
+/*
+cascadeAPI.readBlock("/test/test-block")
+.then(response=>{
+    console.log("Success reading block:");
+    console.log(response);
+})
+.catch(error=>{
+    console.log("Error reading block:");
+    console.log(error);
 });
 */
 
@@ -157,6 +170,39 @@ cascadeAPI.deleteFolder("/test/test2")
 });
 */
 
+// Example creating a block
+/*
+const newBlock = cascadeAPI.createBlankBlockDataDef();
+newBlock.siteName = cascadeAPI.site;
+newBlock.parentFolderPath = "/test/_assets-page-1";
+newBlock.name = "test-block";
+newBlock.metadataSetPath = "Default";
+newBlock.xhtml = "<p>Test content</p>";
+console.log(newBlock);
+cascadeAPI.createBlock(newBlock)
+.then(response=>{
+    console.log("Success creating block:");
+    console.log(response);
+})
+.catch(error=>{
+    console.error("Error creating block:");
+    console.error(error);
+});
+*/
+
+// Delete block
+/*
+cascadeAPI.deleteBlock("/test/test-block")
+.then(response=>{
+    console.log("Success deleting block:");
+    console.log(response);
+})
+.catch(error=>{
+    console.error("Error deleting block:");
+    console.error(error);
+});
+*/
+
 // Example editing a page
 /*
 cascadeAPI.readPage("/test/test")
@@ -222,6 +268,29 @@ cascadeAPI.readFolder("/test/test2")
 })
 .catch(error=>{
     console.error("Error reading folder:");
+    console.error(error);
+});
+*/
+
+// Example editing a block
+/*
+cascadeAPI.readBlock("/test/test-block")
+.then(response=>{
+    console.log("Success reading block:");
+    const foundBlock = response.asset.xhtmlDataDefinitionBlock;
+    foundBlock.xhtml = "<p>New content</p>";
+    cascadeAPI.editBlock(foundBlock)
+    .then(response=>{
+        console.log("Success editing block:");
+        console.log(response);
+    })
+    .catch(error => {
+        console.errer("Error editing block:");
+        console.errer(error);
+    });
+})
+.catch(error=>{
+    console.error("Error reading block:");
     console.error(error);
 });
 */
@@ -304,6 +373,19 @@ cascadeAPI.checkRelationshipsFolder("/test")
 });
 */
 
+// Example checking relationships on a block
+/*
+cascadeAPI.checkRelationshipsBlock("/test/block")
+.then(response=>{
+    console.log("Success getting relationships:");
+    console.log(response);
+})
+.catch(error=>{
+    console.error("Error getting relationships:");
+    console.error(error);
+});
+*/
+
 // Example copying a page
 /*
 cascadeAPI.copyPage("/test/page","page-copy",{path:"/test"})
@@ -343,6 +425,19 @@ cascadeAPI.copyFolder("/test/subfolder","subfolder-copy",{path:"/test"})
 });
 */
 
+// Example copying a block
+/*
+cascadeAPI.copyBlock("/test/test-block","test-block-copy",{path:"/test"})
+.then(response=>{
+    console.log("Copy succeeded");
+    console.log(response);
+})
+.catch(error=>{
+    console.log("Copy failed");
+    console.log(error);
+});
+*/
+
 // Example moving a page
 /*
 cascadeAPI.movePage("/test/page","page-new",{path:"/test"})
@@ -372,6 +467,19 @@ cascadeAPI.moveFile("/test/test-banner.jpg","test-banner-new.jpg",{path:"/test"}
 // Example moving a folder
 /*
 cascadeAPI.moveFolder("/test/subfolder","subfolder-new",{path:"/test"})
+.then(response=>{
+    console.log("Move succeeded");
+    console.log(response);
+})
+.catch(error=>{
+    console.log("Move failed");
+    console.log(error);
+});
+*/
+
+// Example moving a block
+/*
+cascadeAPI.moveBlock("/test/test-block","test-block-new",{path:"/test"})
 .then(response=>{
     console.log("Move succeeded");
     console.log(response);

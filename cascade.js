@@ -70,12 +70,23 @@ class Cascade
     }
 
     /**
-     * Return a blank file, this is helpful when creating new assets.
+     * Return a blank file, this is helpful when creating new assets. This should either have information in the
+     * `data` attribute, or text in the `text` attribute.
      * @returns {CascadeAsset} Blank file
      */
     createBlankFile()
     {
         return new CascadeAsset("file");
+    }
+
+    /**
+     * Return a blank XHTML/Data Definition block, this is helpful when creating new assets. This should either
+     * have properly escaped XHTML in the `xhtml` attribute, or a structured data object in the `structuredData` attribute.
+     * @returns {CascadeAsset} Blank block
+     */
+    createBlankBlockDataDef()
+    {
+        return new CascadeAsset("xhtmlDataDefinition");
     }
 
     /**
@@ -199,6 +210,17 @@ class Cascade
     }
 
     /**
+     * Read a block, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of block to read
+     * @returns {Object} Object representing the Cascade response. Block that was found will depend on what type of block it was
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async readBlock(path)
+    {
+        return await this.APICall("read","block",path);
+    }
+
+    /**
      * Read a folder, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
      * @param {string} path Path or ID of folder to read
      * @returns {Object} Object representing the Cascade response. Page that was found will be in the .asset.page attribute
@@ -232,6 +254,17 @@ class Cascade
     }
 
     /**
+     * Delete a block, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of block to delete
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async deleteBlock(path)
+    {
+        return await this.APICall("delete","block",path);
+    }
+
+    /**
      * Delete a folder, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
      * @param {string} path Path or ID of folder to delete
      * @returns {Object} Object representing the Cascade response.
@@ -255,7 +288,7 @@ class Cascade
     }
 
     /**
-     * Edit a file, given a Cascade file object. Typically the page to edit is read in via [readFile]{@link Cascade#readFile},
+     * Edit a file, given a Cascade file object. Typically the file to edit is read in via [readFile]{@link Cascade#readFile},
      * but it can be manually created as well.
      * @param {Object} assetObject Cascade object representing the file.
      * @returns {Object} Object representing the Cascade response.
@@ -267,7 +300,23 @@ class Cascade
     }
 
     /**
-     * Edit a folder, given a Cascade folder object. Typically the page to edit is read in via [readFolder]{@link Cascade#readFolder},
+     * Edit a block, given a Cascade block object. Typically the block to edit is read in via [readBlock]{@link Cascade#readBlock},
+     * but it can be manually created as well.
+     * 
+     * Unlike other assets, blocks need to specify 
+     * 
+     * @param {Object} assetObject Cascade object representing the block.
+     * @param {string} [blockType=xhtmlDataDefinitionBlock] Type of the block to interact with, this defaults to an XHTML/Data Defintion Block
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async editBlock(assetObject, blockType="xhtmlDataDefinitionBlock")
+    {
+        return await this.APICall("edit","block",assetObject.path,{[blockType]: assetObject});
+    }
+
+    /**
+     * Edit a folder, given a Cascade folder object. Typically the folder to edit is read in via [readFolder]{@link Cascade#readFolder},
      * but it can be manually created as well.
      * @param {Object} assetObject Cascade object representing the folder.
      * @returns {Object} Object representing the Cascade response.
@@ -336,6 +385,19 @@ class Cascade
     }
 
     /**
+     * Create a block, given a Cascade block object. Typically this is created using [createBlankBlockDataDef]{@link Cascade#createBlankBlockDataDef},
+     * but it can be created manually as well.
+     * @param {Object} assetObject Cascade object representing the block.
+     * @param {string} [blockType=xhtmlDataDefinitionBlock] Type of the block to interact with, this defaults to an XHTML/Data Defintion Block
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async createBlock(assetObject, blockType="xhtmlDataDefinitionBlock")
+    {
+        return await this.APICall("create",false,false,{[blockType]: assetObject});
+    }
+
+    /**
      * Create a folder, given a Cascade folder object. Typically this is created using [createBlankFolder]{@link Cascade#createBlankFolder},
      * but it can be created manually as well.
      * @param {Object} assetObject Cascade object representing the folder.
@@ -375,6 +437,21 @@ class Cascade
     async moveFile(path,newName,folderPath)
     {
         return await this.doMove(path,newName,folderPath, "file");
+    }
+
+    /**
+     * Do a move operation on a block, given a path, name, and folder. Unlike the Move and Rename operations in Cascade,
+     * which have separate functionality, this combines them into a single operation.
+     * 
+     * @param {string} path Path or ID of the block to move.
+     * @param {string} newName New name of the block. If the asset is being moved to a different folder, this can be the same as the current name.
+     * @param {string} folderPath Path or ID of the block to move to. If the asset is not being moved to a different folder, this can be the same as the current folder.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async moveBlock(path,newName,folderPath)
+    {
+        return await this.doMove(path,newName,folderPath, "block");
     }
 
     /**
@@ -460,6 +537,19 @@ class Cascade
     }
 
     /**
+     * Make a copy of a a block, given a path, type, new name, and folder.
+     * @param {string} path Path or ID of block to copy.
+     * @param {string} newName New name of the block. If the asset is being copied to a different folder, this can be the same as the current name.
+     * @param {string} folderPath Path or ID of the folder to copy to. If the asset is not being copied to a different folder, this can be the same as the current folder.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async copyBlock(path,newName,folderPath)
+    {
+        return await this.makeCopy(path,newName,folderPath,"block");
+    }
+
+    /**
      * Make a copy of a a folder, given a path, type, new name, and folder.
      * @param {string} path Path or ID of folder to copy.
      * @param {string} newName New name of the folder. If the asset is being copied to a different folder, this can be the same as the current name.
@@ -533,6 +623,17 @@ class Cascade
     }
 
     /**
+     * Check relationships for a file, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
+     * @param {string} path Path or ID of file to check.
+     * @returns {Object} Object representing the Cascade response.
+     * @throws Will throw an error if the Cascade API operation was not successful.
+     */
+    async checkRelationshipsBlock(path)
+    {
+        return await this.APICall("listSubscribers","block",path);
+    }
+
+    /**
      * Check relationships for a folder, given a path or ID (depending on the mode of the Cascade object) and return a Cascade response.
      * @param {string} path Path or ID of folder to check.
      * @returns {Object} Object representing the Cascade response.
@@ -576,6 +677,13 @@ class CascadeAsset
                         title: "",
                         displayName: ""
                     };
+        }
+        else if(type == "xhtmlDataDefinitionBlock")
+        {
+            this.metadataSetId = "";
+            this.metadataSetPath = "";
+            this.xhtml = "";
+            this.structuredData = {};
         }
         else if(type == "file")
         {
