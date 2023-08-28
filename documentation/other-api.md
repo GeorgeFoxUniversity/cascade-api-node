@@ -1,9 +1,9 @@
 # Other API Uses
 
-If an operation isn't specified, you can call the `APICall` function directly to access it. This one lists subscribers for a page: 
+If an operation doesn't have a wrapper function listed for it, you can call the `APICall` function directly to access it. This one reads access rights for a page: 
 
 ```javascript
-cascadeAPI.APICall("listSubscribers","page","/test/test")
+cascadeAPI.APICall("readAccessRights","page","/test/test")
 .then(response=>{
     console.log("Call succeeded");
     console.log(response);

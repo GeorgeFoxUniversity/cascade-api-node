@@ -89,3 +89,17 @@ cascadeAPI.publishPage("/test/test")
     console.log(error);
 });
 ```
+
+## Check Page Relationships
+
+```javascript
+cascadeAPI.checkRelationshipsPage("/test/test")
+.then(response=>{
+    console.log("Success getting relationships:");
+    console.log(response);
+})
+.catch(error=>{
+    console.error("Error getting relationships:");
+    console.error(error);
+});
+```
