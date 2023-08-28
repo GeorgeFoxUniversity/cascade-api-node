@@ -1,6 +1,6 @@
 {
   "name": "cascade-api-node",
-  "version": "0.2",
+  "version": "0.2.0",
   "description": "Wrapper for the Cascade Server API",
   "main": "cascade.js",
   "scripts": {
